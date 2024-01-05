@@ -13,3 +13,13 @@
 After setting the `MODULE_PATH` in the startup file, you can run `install.sh`,
 and it will setup the module files first load necessary, download the packages,
 and install the packages
+
+# TODO
+
+When using installed hdf5 and/or adios have the option to give root dir. For the
+root dir following patter should do:
+
+ADIOS_ROOT=/path/to/adios
+HDF5_ROOT=/path/to/hdf5
+
+Then the setup.py will set the necessary variables.

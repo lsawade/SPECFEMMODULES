@@ -1,4 +1,4 @@
-SYSTEM="frontier"
+SYSTEM="personal"
 ADIOS=true
 HDF5=true
 ASDF=true

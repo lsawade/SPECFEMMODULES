@@ -3,6 +3,8 @@ MODULES = "PrgEnv-cray amd-mixed load cray-mpich craype-accel-amd-gfx90a"
 MODULE_PATH="/ccs/home/lsawade/Modules/modulefiles"
 PACKAGE_DIR="/lustre/orion/geo111/scratch/lsawade/packages"
 COMPILER="CRAY"
+USE_INSTALLED_HDF5="" # Define path to HDF5 MODULE. If empty assumes installation
+USE_INSTALLED_ADIOS="" # Define path to ADIOS MODULE. If empty assumes installation
 
 [frontier.env]
 CUDAWITH="--with-cuda=cuda11"
@@ -11,9 +13,11 @@ COMPILER="IBM"
 [summit]
 README='CANT TEST THIS ANYMORE.'
 MODULES = "cmake xl spectrum-mpi cuda boost"
-SF_HOST="SUMMIT"
 MODULE_PATH="/ccs/home/lsawade/Modules/modulefiles"
 PACKAGE_DIR="/scratch/gpfs/lsawade/packages"
+COMPILER="IBM"
+USE_INSTALLED_HDF5="" # Define path to HDF5 MODULE. If empty assumes installation
+USE_INSTALLED_ADIOS="" # Define path to ADIOS MODULE. If empty assumes installation
 
 [summit.env]
 CUDAWITH="--with-cuda=cuda9"
@@ -24,6 +28,9 @@ COMPILER="IBM"
 MODULES="openmpi/gcc/4.0.4/64 cudatoolkit/11.1"
 MODULE_PATH="/home/lsawade/Modules/modulefiles"
 PACKAGE_DIR="/scratch/gpfs/lsawade/packages"
+COMPILER="GNU"
+USE_INSTALLED_HDF5="" # Define path to HDF5 MODULE. If empty assumes installation
+USE_INSTALLED_ADIOS="" # Define path to ADIOS MODULE. If empty assumes installation
 
 [traverse.env]
 CUDAWITH="--with-cuda=cuda9"
@@ -32,11 +39,20 @@ COMPILER="GNU"
 [della-gpu]
 MODULES="gcc/8 openmpi/gcc/4.1.2 cudatoolkit/11.7"
 MODULE_PATH="/home/lsawade/Modules/modulefiles/"
+PACKAGE_DIR="/scratch/gpfs/lsawade/packages"
+COMPILER="GNU"
+USE_INSTALLED_HDF5="" # Define path to HDF5 MODULE. If empty assumes installation
+USE_INSTALLED_ADIOS="" # Define path to ADIOS MODULE. If empty assumes installation
+
 
 [della-gpu.env]
 CUDAWITH="--with-cuda=cuda11"
 COMPILER="GNU"
 
-[ornlhome]
-COMPILER="IBM"
-
+[personal]
+MODULES = ""
+MODULE_PATH="/Users/lucassawade/nobackup/modules"
+PACKAGE_DIR="/Users/lucassawade/nobackup/packages"
+COMPILER="GNU"
+USE_INSTALLED_HDF5="" # Define path to HDF5 MODULE. If empty assumes installation
+USE_INSTALLED_ADIOS=""

@@ -89,7 +89,6 @@ def base():
             f"{compiler} compiler not supported yet. Exiting...")
 
 
-
     filestring = ""
     filestring += "#%Module\n\n"
 
@@ -101,10 +100,17 @@ def base():
     filestring += "\n\n"
 
     filestring += "# Setting prereq\n"
-    filestring += f'prereq {modules}\n'
+
+    for module in modules.split():
+        filestring += f'prereq {modules}\n'
+
+    if len(systemcfg['USE_INSTALLED_ADIOS']) != 0:
+        filestring += f"prereq {systemcfg['USE_INSTALLED_ADIOS']}\n"
+
+    if len(systemcfg['USE_INSTALLED_HDF5']) != 0:
+        filestring += f"prereq {systemcfg['USE_INSTALLED_HDF5']}\n"
+
     filestring += "\n\n"
-
-
     filestring += "# Setting environment variables\n"
     filestring += f'setenv COMPILER "{compiler}"\n'
 
@@ -133,6 +139,10 @@ def adios():
 
     if maincfg['ADIOS'] == False:
         print("ADIOS not enabled in main.toml. Exiting...")
+        return
+
+    if len(systemcfg['USE_INSTALLED_ADIOS']) != 0:
+        print(f"Using module {systemcfg['USE_INSTALLED_ADIOS']}")
         return
 
     # Some main variables
@@ -165,10 +175,10 @@ def adios():
 
     filestring += "# Setting environment variables\n"
     filestring += f'setenv ADIOS_LINK "{adios_link}"\n'
+    filestring += f'setenv ADIOS_DIR "{adios_dir}"\n'
     filestring += f'setenv ADIOS_BUILD "{adios_build}"\n'
     filestring += f'setenv ADIOS_INSTALL "{adios_install}"\n'
     filestring += f'setenv ADIOS_VERSION "{adios_version}"\n'
-    filestring += f'setenv ADIOS_DIR "{adios_dir}"\n'
 
     # Very specfem specific flags
     if int(adios_version[0]) >= 2:
@@ -216,6 +226,11 @@ def hdf5():
     hdf5_dir = os.path.join(hdf5_base_dir, 'main')
     hdf5_build = os.path.join(hdf5_base_dir, 'build')
     hdf5_install = os.path.join(hdf5_base_dir, 'install')
+
+
+    if len(systemcfg['USE_INSTALLED_HDF5']) != 0:
+        print(f"Using module {systemcfg['USE_INSTALLED_HDF5']}")
+        return
 
     # Define where to put the module file
     modulepath = systemcfg['MODULE_PATH']
