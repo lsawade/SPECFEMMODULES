@@ -1,5 +1,5 @@
-SYSTEM="personal"
+SYSTEM="frontier"
 ADIOS=true
 HDF5=true
-ASDF=true
+ASDF=false # not yet implemented
 VERSION="1.0.0"

@@ -1,10 +1,17 @@
+"""
+
+Creates module files for base environment variables, adios2, and hdf5.
+
+TODO: Add support for ASDF
+
+"""
 import toml
 import os
 
 filedirectory = os.path.dirname(os.path.realpath(__file__))
 configdir = os.path.join(filedirectory, '..', 'configs')
 
-def base():
+def core():
 
     # Load configs
     maincfg = toml.load(os.path.join(configdir,'main.toml'))
@@ -15,7 +22,8 @@ def base():
 
     # Module path
     modulepath = systemcfg['MODULE_PATH']
-    module_dir = os.path.join(modulepath, 'base')
+    module_suffix= systemcfg['MODULE_SUFFIX']
+    module_dir = os.path.join(modulepath, 'core' + "-" + module_suffix)
     modulefilename = os.path.join(module_dir, maincfg['VERSION'])
 
     # Get compiler variables from the config
@@ -23,14 +31,19 @@ def base():
 
         # Frontier is a special case
         if system == 'frontier':
+            mpich_dir = os.environ['MPICH_DIR']
+            MPI_INC=f"{mpich_dir}/include"
+
             cdict = dict(
                 CC="cc",
                 CXX="cc",
                 MPICC="cc",
                 MPICXX="cc",
                 FC="ftn",
-                MPIFC="ftn"
+                MPIFC="ftn",
+                MPI_INC=f"{MPI_INC}"
             )
+
         else:
             cdict = dict(
                 CC="xlc",
@@ -46,13 +59,17 @@ def base():
         # Frontier is a special case
         if system == 'frontier':
 
+            mpich_dir = os.environ['MPICH_DIR']
+            MPI_INC=f"{mpich_dir}/include"
+
             cdict = dict(
                 CC="cc",
                 CXX="cc",
                 MPICC="cc",
                 MPICXX="cc",
                 FC="ftn",
-                MPIFC="ftn"
+                MPIFC="ftn",
+                MPI_INC=f"{MPI_INC}"
             )
 
         else:
@@ -72,7 +89,10 @@ def base():
         # the compilers are all the same
         if system != 'frontier':
             raise ValueError(
-                "CRAY compiler only supported on frontier. Exiting...")
+                "CRAY compiler only supported on frontier for now. Exiting...")
+
+        mpich_dir = os.environ['MPICH_DIR']
+        MPI_INC=f"{mpich_dir}/include"
 
         cdict = dict(
             CC="cc",
@@ -80,8 +100,10 @@ def base():
             MPICC="cc",
             MPICXX="cc",
             FC="ftn",
-            MPIFC="ftn"
+            MPIFC="ftn",
+            MPI_INC=f"{MPI_INC}"
         )
+
 
     else:
 
@@ -113,6 +135,7 @@ def base():
     filestring += "\n\n"
     filestring += "# Setting environment variables\n"
     filestring += f'setenv COMPILER "{compiler}"\n'
+    filestring += f'setenv SF_SYSTEM "{system}"\n'
 
     # Set values from compiler dictionary
     for key, value in cdict.items():
@@ -131,7 +154,7 @@ def base():
 def adios():
 
     # Load configs
-   # Load configs
+    # Load configs
     maincfg = toml.load(os.path.join(configdir,'main.toml'))
     system = maincfg['SYSTEM']
     systemcfg = toml.load(os.path.join(configdir,'system.toml'))[system]
@@ -157,7 +180,8 @@ def adios():
 
     # Define where to
     modulepath = systemcfg['MODULE_PATH']
-    module_dir = os.path.join(modulepath, base_module)
+    module_suffix= systemcfg['MODULE_SUFFIX']
+    module_dir = os.path.join(modulepath, base_module+"-"+module_suffix)
     modulefilename = os.path.join(module_dir, adios_version)
 
 
@@ -227,14 +251,14 @@ def hdf5():
     hdf5_build = os.path.join(hdf5_base_dir, 'build')
     hdf5_install = os.path.join(hdf5_base_dir, 'install')
 
-
     if len(systemcfg['USE_INSTALLED_HDF5']) != 0:
         print(f"Using module {systemcfg['USE_INSTALLED_HDF5']}")
         return
 
     # Define where to put the module file
     modulepath = systemcfg['MODULE_PATH']
-    module_dir = os.path.join(modulepath, base_module)
+    module_suffix= systemcfg['MODULE_SUFFIX']
+    module_dir = os.path.join(modulepath, base_module + "-" + module_suffix)
     modulefilename = os.path.join(module_dir, hdf5_version)
 
     # Creating module file dynamically
@@ -282,7 +306,12 @@ def hdf5():
         f.write(filestring)
 
 
+def asdf():
+    print('ASDF not supported yet...')
+    return
+
 if __name__ == '__main__':
-    base()
+    core()
     adios()
     hdf5()
+    asdf()

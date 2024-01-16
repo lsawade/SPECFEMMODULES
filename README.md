@@ -1,3 +1,16 @@
+# SFMODULES
+
+The goal of this set of scripts is to streamline the installation of
+dependencies of specfem. Once installation is done, all that needs to be done
+is
+```bash
+module load core-<suffix> hdf5-<suffix> adios2-<suffix>
+```
+to load environment variables relevant for the compilation of specfem.
+
+
+
+
 # Installing the modules required for specfem3D_globe
 
 
@@ -13,6 +26,14 @@
 After setting the `MODULE_PATH` in the startup file, you can run `install.sh`,
 and it will setup the module files first load necessary, download the packages,
 and install the packages
+
+# Note on installing h5py afterwards.
+
+If you want to install hdf5, you have to install openssl on Frontier manually.
+```bash
+conda install conda-forge::libssh
+```
+for some reason the local `/usr/lib64/libssh.so` is missing a symbol
 
 # TODO
 
